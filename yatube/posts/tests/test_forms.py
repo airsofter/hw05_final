@@ -85,5 +85,4 @@ class PostCreateFormTest(SetUpMixin, TestCase):
             response,
             reverse('users:login') + '?next=' + reverse(
                 'posts:add_comment', kwargs={'post_id': self.post.id}
-                )
-        )
+            ))

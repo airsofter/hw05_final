@@ -189,7 +189,7 @@ class TestsFollow(TestCase):
             'posts:profile_follow', kwargs={'username': self.author.username}
         ))
         follow_after = Follow.objects.count()
-        self.assertEqual(follow_after, follow_count+1)
+        self.assertEqual(follow_after, follow_count + 1)
         self.assertTrue(Follow.objects.filter(user=self.user,
                                               author=self.author).exists())
 
@@ -200,7 +200,7 @@ class TestsFollow(TestCase):
             'posts:profile_unfollow', kwargs={'username': self.author.username}
         ))
         follow_after = Follow.objects.count()
-        self.assertEqual(follow_after, follow_count_before-1)
+        self.assertEqual(follow_after, follow_count_before - 1)
         self.assertFalse(Follow.objects.filter(user=self.user,
                                                author=self.author).exists())
 
