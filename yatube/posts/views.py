@@ -120,7 +120,7 @@ def follow_index(request: HttpRequest):
     context = {
         'page_obj': page_obj
     }
-
+    # А мне предыдущий ревьюер сказал так точки выхода из функции обозначать)
     return render(request, 'posts/follow.html', context)
 
 
@@ -135,8 +135,9 @@ def profile_follow(request: HttpRequest, username):
 
 @login_required
 def profile_unfollow(request: HttpRequest, username):
-    subscription = get_object_or_404(User, username=username)
-    following = Follow.objects.filter(author=subscription, user=request.user)
-    following.delete()
+    subscription = get_object_or_404(
+        Follow, author__username=username, user=request.user
+    )
+    subscription.delete()
 
     return redirect('posts:follow_index')
