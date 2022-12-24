@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 from yatube.settings import CHARACTER_LIMIT
-from core.models import CreatedModel
 
 
 User = get_user_model()
@@ -22,7 +21,7 @@ class Group(models.Model):
         verbose_name_plural = 'Группы'
 
 
-class Post(CreatedModel):
+class Post(models.Model):
     text = models.TextField(
         verbose_name='Текст поста',
         help_text='Введите текст поста'
@@ -47,6 +46,10 @@ class Post(CreatedModel):
         upload_to='posts/',
         blank=True
     )
+    pub_date = models.DateTimeField(
+        verbose_name='Дата создания',
+        auto_now_add=True
+    )
 
     class Meta:
         verbose_name = 'Пост'
@@ -57,7 +60,7 @@ class Post(CreatedModel):
         return self.text[:CHARACTER_LIMIT]
 
 
-class Comment(CreatedModel):
+class Comment(models.Model):
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
@@ -74,6 +77,14 @@ class Comment(CreatedModel):
         verbose_name='Текст комментария',
         help_text='Введите текст'
     )
+    pub_date = models.DateTimeField(
+        verbose_name='Дата создания',
+        auto_now_add=True
+    )
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
 
 
 class Follow(models.Model):
@@ -81,9 +92,15 @@ class Follow(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name='follower',
+        verbose_name='Подписчик',
     )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='following',
+        verbose_name='Автор',
     )
+
+    class Meta:
+        verbose_name = 'Подписчик'
+        verbose_name_plural = 'Подписчики'

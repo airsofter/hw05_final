@@ -8,8 +8,6 @@ from ..models import User, Post, Group
 from ..forms import PostForm
 
 
-# некотрые данные пришлось вынести отсюда из за
-# специфики работы setUpClass и его наследования
 class SetUpMixin:
     @classmethod
     def setUpClass(cls):

@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_page
 from django.http import HttpRequest
 
-from .models import Post, Group, User, Comment, Follow
+from .models import Post, Group, User, Follow
 from .forms import PostForm, CommentForm
 from .utils import get_page_object
 
@@ -36,7 +36,7 @@ def group_posts(request: HttpRequest, slug):
 def profile(request: HttpRequest, username):
     template = 'posts/profile.html'
     author = get_object_or_404(User, username=username)
-    posts_list = Post.objects.filter(author=author).order_by('-pub_date')
+    posts_list = author.posts.all().order_by('-pub_date')
     page_obj = get_page_object(posts_list, request)
     context = {
         'author': author,
@@ -54,7 +54,7 @@ def post_detail(request: HttpRequest, post_id):
     template = 'posts/post_detail.html'
     post = get_object_or_404(Post, id=post_id)
     form = CommentForm(request.POST or None)
-    comments = Comment.objects.filter(post=post)
+    comments = post.comments.all()
     context = {
         'post': post,
         'form': form,
@@ -135,8 +135,8 @@ def profile_follow(request: HttpRequest, username):
 
 @login_required
 def profile_unfollow(request: HttpRequest, username):
-    author = get_object_or_404(User, username=username)
-    following = Follow.objects.filter(author=author, user=request.user)
+    subscription = get_object_or_404(User, username=username)
+    following = Follow.objects.filter(author=subscription, user=request.user)
     following.delete()
 
     return redirect('posts:follow_index')
