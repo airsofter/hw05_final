@@ -120,7 +120,7 @@ def follow_index(request: HttpRequest):
     context = {
         'page_obj': page_obj
     }
-    # А мне предыдущий ревьюер сказал так точки выхода из функции обозначать)
+
     return render(request, 'posts/follow.html', context)
 
 

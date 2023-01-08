@@ -15,7 +15,7 @@
             <li class="list-group-item">
               Группа: {{ post.group.title }}
               <a href="{% url 'posts:group_list' post.group.slug %}">
-                все записи группы
+                Все записи группы
               </a>
             </li>
             {% endif %}
@@ -27,22 +27,24 @@
             </li>
             <li class="list-group-item">
               <a href="{% url 'posts:profile' post.author.username %}">
-                все посты пользователя
+                Все посты пользователя
               </a>
             </li>
           </ul>
         </aside>
         <article class="col-12 col-md-9">
-          {% thumbnail post.image "960x339" crop="center" upscale=True as im %}
-            <img class="card-img my-2" src="{{ im.url }}">
+          {% thumbnail post.image "960x339" crop="noop" upscale=True as im %}
+            <img class="card-img my-2" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
           {% endthumbnail %}
           <p>
            {{ post.text|linebreaksbr }}
           </p>
+          {% if post.author.username == request.user.username %}
+            <a href="{% url 'posts:post_edit' post.id %}" class="btn btn-primary" role="button">
+              Редактировать запись
+            {% endif %}
+          </a>
         </article>
-        {% if post.author.username == request.user.username %}
-          <a class="btn brn-primary" href="{% url 'posts:post_edit' post.id %}">редактировать запись</a>
-        {% endif %}
         {% include 'posts/includes/add_comment.html' %}
       </div> 
     </main>
